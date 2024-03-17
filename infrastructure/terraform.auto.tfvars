@@ -15,7 +15,7 @@
 namespace      = "tapteam01a"
 env            = "dev"
 region         = "ap-southeast-2"
-account_id     = "123456789"
+account_id     = "211125640160"
 vpc_cidr_block = "10.0.0.0/16"
 public_subnet_cidr_block = {
   "ap-southeast-2a" = "10.0.0.0/24"
@@ -72,3 +72,4 @@ security_group_ingress = {
     cidr_blocks = ["10.0.100.0/24"]
   }
 }
+iam_role_cost_lambda = "iam_role_cost"

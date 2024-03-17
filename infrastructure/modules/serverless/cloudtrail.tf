@@ -15,13 +15,13 @@
 # Create an S3 bucket for storing CloudTrail logs
 resource "aws_s3_bucket" "this" {
   #ts:skip=AWS.S3Bucket.IAM.High.0370 We are aware of the risk and choose to skip this rule
-  count = var.create_cloudtrail_s3_bucket ? 1 : 0
+  count  = var.create_cloudtrail_s3_bucket ? 1 : 0
   bucket = "${var.namespace}-cloudtrail-logs-storage"
   tags   = merge(local.tags, tomap({ "Name" = "${var.namespace}-bucket" }))
 }
 
 resource "aws_s3_bucket_versioning" "this" {
-  count = var.create_cloudtrail_s3_bucket ? 1 : 0
+  count  = var.create_cloudtrail_s3_bucket ? 1 : 0
   bucket = aws_s3_bucket.this[count.index].id
   versioning_configuration {
     status = "Enabled"
@@ -120,7 +120,7 @@ EOF
 }
 
 resource "aws_kms_alias" "create_cloudtrail_kms_alias" {
-    count = var.env != "prod" && var.create_cloudtrail_kms && length(data.aws_kms_alias.check_existing_kms) == 0 ? 1 : 0
+  count = var.env != "prod" && var.create_cloudtrail_kms && length(data.aws_kms_alias.check_existing_kms) == 0 ? 1 : 0
 
   name          = var.create_cloudtrail_kms ? "alias/${var.namespace}-kms-key" : null
   target_key_id = var.create_cloudtrail_kms ? aws_kms_key.this[0].key_id : null

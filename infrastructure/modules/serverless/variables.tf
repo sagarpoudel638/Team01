@@ -144,3 +144,7 @@ variable "env" {
   type        = string
 }
 
+variable "iam_role_cost_lambda" {
+  type        = string
+  description = "Name of the Lambda function of Team 01 getting cost from IAM ROLE "
+}

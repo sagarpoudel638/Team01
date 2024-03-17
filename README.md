@@ -1,206 +1,435 @@
-<br>
+# terraform-docs
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Docs](https://img.shields.io/badge/docs-latest-blue)](https://github.com/XgridInc/xc3)
-[![Slack](https://slackin.px.dev/badge.svg)](https://app.slack.com/client/T055VHJ0087/C0571UK3SBG)
-[![Open AI Reviewer](https://github.com/XgridInc/xc3/actions/workflows/openai-pr-reviewer.yml/badge.svg)](https://github.com/XgridInc/xc3/actions/workflows/openai-pr-reviewer.yml)
-[![Code Linter](https://github.com/XgridInc/xc3/actions/workflows/linter.yml/badge.svg)](https://github.com/XgridInc/xc3/actions/workflows/linter.yml)
-[![Shellcheck](https://github.com/XgridInc/xc3/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/XgridInc/xc3/actions/workflows/shellcheck.yml)
-[![Code Vulnerability](https://github.com/XgridInc/xc3/actions/workflows/checkov.yml/badge.svg)](https://github.com/XgridInc/xc3/actions/workflows/checkov.yml)
+[![Build Status](https://github.com/terraform-docs/terraform-docs/workflows/ci/badge.svg)](https://github.com/terraform-docs/terraform-docs/actions) [![GoDoc](https://pkg.go.dev/badge/github.com/terraform-docs/terraform-docs)](https://pkg.go.dev/github.com/terraform-docs/terraform-docs) [![Go Report Card](https://goreportcard.com/badge/github.com/terraform-docs/terraform-docs)](https://goreportcard.com/report/github.com/terraform-docs/terraform-docs) [![Codecov Report](https://codecov.io/gh/terraform-docs/terraform-docs/branch/master/graph/badge.svg)](https://codecov.io/gh/terraform-docs/terraform-docs) [![License](https://img.shields.io/github/license/terraform-docs/terraform-docs)](https://github.com/terraform-docs/terraform-docs/blob/master/LICENSE) [![Latest release](https://img.shields.io/github/v/release/terraform-docs/terraform-docs)](https://github.com/terraform-docs/terraform-docs/releases)
 
-<br>
+![terraform-docs-teaser](./images/terraform-docs-teaser.png)
 
-# XC3
+Sponsored by [Scalr - Terraform Automation & Collaboration Software](https://scalr.com/?utm_source=terraform-docs)
 
-Xgrid Cloud Cost Control is a cloud agnostic and risk free package offering powered by Cloud Custodian that provides security enforcement, tagging, unused or invalid resources cleanup, account maintenance, cost control, and backups. It supports managing AWS public cloud environments and provides a visualization of usage of resources in account with support of managing resource utilization on a click. It spins up automation scripts and triggers lambdas to control cost of running resources in aws accounts and maintain state of each resource on which action performed having real-time visibility into who made what changes from where, enables us to detect misconfigurations and non-compliance. It supports rollback plans to prevent risks from materializing. Cloud Cost Control supports conditional policy execution. It generates reports, region vise and maintains state as well.
+<a href="https://www.scalr.com/?utm_source=terraform-docs" target="_blank"><img src="https://bit.ly/2T7Qm3U" alt="Scalr - Terraform Automation & Collaboration Software" width="175" height="40" /></a>
 
-Check the below video for a quick demo of XC3.
+## What is terraform-docs
 
-[![XC3 Youtube](https://user-images.githubusercontent.com/114464405/229470468-ab186c9a-c475-40f2-9758-b89a7a3555d9.png)](https://www.youtube.com/watch?v=K4eEcl3wTZ0)
+A utility to generate documentation from Terraform modules in various output formats.
 
-## Features
+## Installation
 
-- One platform to track all your cloud resources be it cloud, multi-cloud, or hybrid infrastructure. It can track GCP, Azure, and AWS resources on a single UI.
+macOS users can install using [Homebrew]:
 
-- Enforces Tagging compliance that plays a vital role in determining the resources cost and many other aspects as well
+```bash
+brew install terraform-docs
+```
 
-- Provides Scheduled monitoring and alerting workflow that helps to track resource utilization and take action immediately.
+or
 
-- Provides cost optimization recommendation workflow without exposing your private information
+```bash
+brew install terraform-docs/tap/terraform-docs
+```
 
-# XC3 System Architecture Visual Overview
+Windows users can install using [Scoop]:
 
-<b>` XC3 has two architecture diagrams, representing its 'Dev' and 'Prod' environments.`</b>
+```bash
+scoop bucket add terraform-docs https://github.com/terraform-docs/scoop-bucket
+scoop install terraform-docs
+```
 
-# XC3 Dev Architecture
+or [Chocolatey]:
 
-![XC3 Dev Architecture](https://github.com/XgridInc/xc3/assets/138758061/8bd4a8f3-ee54-44ee-a152-865d7ce6bb2b)
+```bash
+choco install terraform-docs
+```
 
-`This diagram illustrates the architecture of the "dev" environment for XC3. Below are the key components:`
+Stable binaries are also available on the [releases] page. To install, download the
+binary for your platform from "Assets" and place this into your `$PATH`:
 
-- EC2 Instance (Public Subnet): Acts as the entry point for the "dev" environment.
-- Lambda Functions (Private Subnet): Executes serverless tasks within a secure private subnet.
-- SQS (Simple Queue Service): Provides queuing capability for asynchronous tasks.
-- SES (Simple Email Service): Handles email communications.
-- Cost Explorer: Assists in analyzing and managing costs.
-- Scheduled CloudWatch Events: Enables automated event triggering.
-- S3 (Simple Storage Service): Used for storing state files and other data.
-- Additional services (Push Gateway, Grafana, Prometheus, Cloud Custodian) run on the EC2 instance to monitor and manage the environment.
+```bash
+curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-$(uname)-amd64.tar.gz
+tar -xzf terraform-docs.tar.gz
+chmod +x terraform-docs
+mv terraform-docs /usr/local/terraform-docs
+```
 
-Access to the "dev" environment is primarily through the EC2 instance's IP address. SSH is available for administrative purposes.
+**NOTE:** Windows releases are in `ZIP` format.
 
-# XC3 Prod Architecture Diagram
+The latest version can be installed using `go install` or `go get`:
 
-![XC3 Prod Architecture](https://github.com/XgridInc/xc3/assets/122358742/1f9b1c1e-92ca-4b2e-af17-8465214f25e9)
+```bash
+# go1.17+
+go install github.com/terraform-docs/terraform-docs@v0.16.0
+```
 
-`This diagram illustrates the architecture of the "prod" environment for XC3. It includes the following components:`
+```bash
+# go1.16
+GO111MODULE="on" go get github.com/terraform-docs/terraform-docs@v0.16.0
+```
 
-- Cognito: Manages user authentication and authorization.
-- Route 53: Provides DNS routing services for efficient access.
-- Elastic Load Balancer: Distributes incoming traffic to ensure high availability.
-- EC2 Instance and Lambda Functions (Private Subnet): Similar to the "dev" environment but with additional security and scalability measures.
-- SQS (Simple Queue Service): Handles queuing tasks.
-- SES (Simple Email Service): Manages email communications.
-- Cost Explorer: Assists in analyzing and managing costs.
-- Scheduled CloudWatch Events: Enables automated event triggering.
-- S3 (Simple Storage Service): Used for storing state files and other data.
-- EIC Endpoint (Endpoint Isolation and Control): Enhances security and isolation within the "prod" environment.
+**NOTE:** please use the latest Go to do this, minimum `go1.16` is required.
 
-Access to the "prod" environment is facilitated through a DNS URL, thanks to Route 53. This architecture prioritizes security, scalability, and high availability to support the production environment for XC3.
+This will put `terraform-docs` in `$(go env GOPATH)/bin`. If you encounter the error
+`terraform-docs: command not found` after installation then you may need to either add
+that directory to your `$PATH` as shown [here] or do a manual installation by cloning
+the repo and run `make build` from the repository which will put `terraform-docs` in:
 
-# To start using XC3
+```bash
+$(go env GOPATH)/src/github.com/terraform-docs/terraform-docs/bin/$(uname | tr '[:upper:]' '[:lower:]')-amd64/terraform-docs
+```
 
-## Requirements
+## Usage
 
----
+### Running the binary directly
 
-- [Terraform](https://www.terraform.io/downloads.html) 1.0+
-- [Python](https://www.python.org/downloads) 3.9
-- [AWScli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
-- [Cloud Custodian](https://cloudcustodian.io/docs/quickstart/index.html#install-cloud-custodian)
-- [Prometheus/Grafana/Pushgateway](https://github.com/Einsteinish/Docker-Compose-Prometheus-and-Grafana.git)
-- [checkov](https://github.com/bridgecrewio/checkov) 2.0.574 or later
-- [shellcheck](https://github.com/koalaman/shellcheck) 0.7.1 or later
+To run and generate documentation into README within a directory:
 
-## Pre-requisites
+```bash
+terraform-docs markdown table --output-file README.md --output-mode inject /path/to/module
+```
 
----
+Check [`output`] configuration for more details and examples.
 
-1. Clone GitHub repo
-   ` git clone https://github.com/XgridInc/xc3.git`
-2. An AWS user with specific permission set user access.
+### Using docker
 
-   Refer the IAM Permission Set created in `pre_requirement` folder to setup XC3.
+terraform-docs can be run as a container by mounting a directory with `.tf`
+files in it and run the following command:
 
-3. VPC needs to be present in the master account where you want to set up XC3
+```bash
+docker run --rm --volume "$(pwd):/terraform-docs" -u $(id -u) quay.io/terraform-docs/terraform-docs:0.16.0 markdown /terraform-docs
+```
 
-4. To store terraform state and to maintain lock, S3 bucket and dynamodb should be available in master account.
+If `output.file` is not enabled for this module, generated output can be redirected
+back to a file:
 
-5. ACM certificate should be available. It will be associated with loadbalancer and domain.
+```bash
+docker run --rm --volume "$(pwd):/terraform-docs" -u $(id -u) quay.io/terraform-docs/terraform-docs:0.16.0 markdown /terraform-docs > doc.md
+```
+
+**NOTE:** Docker tag `latest` refers to _latest_ stable released version and `edge`
+refers to HEAD of `master` at any given point in time.
+
+### Using GitHub Actions
+
+To use terraform-docs GitHub Action, configure a YAML workflow file (e.g.
+`.github/workflows/documentation.yml`) with the following:
+
+```yaml
+name: Generate terraform docs
+on:
+  - pull_request
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Render terraform docs and push changes back to PR
+      uses: terraform-docs/gh-actions@main
+      with:
+        working-dir: .
+        output-file: README.md
+        output-method: inject
+        git-push: "true"
+```
+
+Read more about [terraform-docs GitHub Action] and its configuration and
+examples.
+
+### pre-commit hook
+
+With pre-commit, you can ensure your Terraform module documentation is kept
+up-to-date each time you make a commit.
+
+First [install pre-commit] and then create or update a `.pre-commit-config.yaml`
+in the root of your Git repo with at least the following content:
+
+```yaml
+repos:
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.16.0"
+    hooks:
+      - id: terraform-docs-go
+        args: ["markdown", "table", "--output-file", "README.md", "./mymodule/path"]
+```
+
+Then run:
+
+```bash
+pre-commit install
+pre-commit install-hooks
+```
+
+Further changes to your module's `.tf` files will cause an update to documentation
+when you make a commit.
+
+## Configuration
+
+terraform-docs can be configured with a yaml file. The default name of this file is
+`.terraform-docs.yml` and the path order for locating it is:
+
+1. root of module directory
+1. `.config/` folder at root of module directory
+1. current directory
+1. `.config/` folder at current directory
+1. `$HOME/.tfdocs.d/`
 
-6. The user has to **enable CostExplorer** by following the below link.
+```yaml
+formatter: "" # this is required
 
-   https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-enable.html
+version: ""
 
-   ```
-   Note: After enabling CE, it may take up to 24hours for AWS to start capturing your AWS account cost data, hence XC3 may not show the data until CE data is available in AWS account
-   ```
+header-from: main.tf
+footer-from: ""
 
-# Deployment
+recursive:
+  enabled: false
+  path: modules
 
-1.  Clone the GitHub repository in your local computer to setup XC3 infrastructure.
+sections:
+  hide: []
+  show: []
 
-    ```
-    git clone https://github.com/XgridInc/xc3.git
-    ```
+content: ""
 
-2.  Go to the directory xc3/ and configure the input.sh file and run the below command
+output:
+  file: ""
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
 
-    ```
-    cd xc3/
+output-values:
+  enabled: false
+  from: ""
 
-        Note :
-            - Configure the input.sh file in directory xc3/
+sort:
+  enabled: true
+  by: name
 
-               namespace="example"
-               project="example"
-               region="eu-west-1"
-               allow_traffic="0.0.0.0/0"
-               domain="" #  [Optional] - If you want to use your own domain then set this variable.
-               account_id="123456789012"
-               hosted_zone_id="Z053166920YP1STI0EK5X"
-               owner_email="admin@example.co"
-               creator_email="admin@example.co"
-               ses_email_address="admin@example.co"
-               bucket_name="terraform-state-example"
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
+```
 
-            - Before running the below mentioned command:
+## Content Template
 
-    bash init.sh
-    ```
+Generated content can be customized further away with `content` in configuration.
+If the `content` is empty the default order of sections is used.
 
-3.  Wait for few minutes before proceeding further for the application to come online.
-    Verify the readiness of the metrics system. Load the Grafana URL in a browser. Live Grafana UI ensures the system is ready to accept and visualize metrics.
+Compatible formatters for customized content are `asciidoc` and `markdown`. `content`
+will be ignored for other formatters.
 
-    > Verify the readiness of metrics system by accessing Grafana UI: https://xc3.xxx.com/login
+`content` is a Go template with following additional variables:
 
-    > Verify the readiness of metrics system by accessing Grafana UI: `loadbalancer-dns`. If Hosted zone ID is not provided in `input.tfvars`.
+- `{{ .Header }}`
+- `{{ .Footer }}`
+- `{{ .Inputs }}`
+- `{{ .Modules }}`
+- `{{ .Outputs }}`
+- `{{ .Providers }}`
+- `{{ .Requirements }}`
+- `{{ .Resources }}`
 
-4.  Now setup is complete. If domain is provided in the input.sh then users needs to be added in Cognito pool with requested role (admin/editor/viewer) in respective cognito group. User get random username/password from cognito then you can set password on domain by sign in using random credentials.
+and following functions:
 
-5.  SSH into the private instance using EIC Endpoint to check if everything is working fine. Here replace [instance-id] needs to be replaced with ID
+- `{{ include "relative/path/to/file" }}`
 
-    `ssh ubuntu@[instance-id] -i keypair.pem -o ProxyCommand='aws ec2-instance-connect open-tunnel --instance-id %h'`
+These variables are the generated output of individual sections in the selected
+formatter. For example `{{ .Inputs }}` is Markdown Table representation of _inputs_
+when formatter is set to `markdown table`.
 
-6.  Go to AWS Systems Manager, select Parameter Store, and create a new parameter named "/{namespace}/region_names". Set the value as a dictionary with region IDs as keys and region names as values.
+Note that sections visibility (i.e. `sections.show` and `sections.hide`) takes
+precedence over the `content`.
 
-7.  SSH into the private instance using EIC Endpoint to check if everything is working fine. Here replace [instance-id] needs to be replaced with ID
+Additionally there's also one extra special variable avaialble to the `content`:
 
-    `ssh ubuntu@[instance-id] -i keypair.pem -o ProxyCommand='aws ec2-instance-connect open-tunnel --instance-id %h'`
+- `{{ .Module }}`
 
-8.  Now XC3 will run at 05:00AM UTC every day to generate data and populate Grafana. Few lambdas (Total Account Cost and Project spend) will run twice in a month.
+As opposed to the other variables mentioned above, which are generated sections
+based on a selected formatter, the `{{ .Module }}` variable is just a `struct`
+representing a [Terraform module].
 
-        Note :
-            1. If data is not available in Grafana UI then follow the troubleshooting guide at the last section of this page.
+````yaml
+content: |-
+  Any arbitrary text can be placed anywhere in the content
 
-# Troubleshooting Guide
+  {{ .Header }}
 
-case 1: If data is not showing into Grafana UI, there could be several reasons as shown below.
+  and even in between sections
 
-1. If AWS account was created freshly within last 24 hours then, you need to enable CostExplorer by following below link
+  {{ .Providers }}
 
-   https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-enable.html
+  and they don't even need to be in the default order
 
-2. If the AWS account was created freshly within the last 24 hours then, it may take up to 24 hours for the AWS team to generate cost information in your account.
-   you may see below error in lambda logs in Cloudwatch
+  {{ .Outputs }}
 
-   [ERROR] DataUnavailableException: An error occurred (DataUnavailableException) when calling the GetCostAndUsage operation: Data is not available. Please try to adjust the time period. If just enabled Cost Explorer, data might not be ingested yet
+  include any relative files
 
-3. XC3 Budget Detail/IAM Role/User Workflow lambda may have failed to execute , please check Cloudwatch logs to address the issue.
+  {{ include "relative/path/to/file" }}
 
-4. Check if XC3's most expensive services data is missing, and if so, verify the existence of the corresponding SSM parameter in AWS Systems Manager. To address this issue, ensure you follow step 5 of the deployment instructions.
+  {{ .Inputs }}
 
-case 2: user not able to change/update/modify default dashboards in Grafana UI
+  # Examples
 
-1.  You can't change/update default dashboards.
-2.  If you need to make changes, please request for access for Editor/Admin role on
+  ```hcl
+  {{ include "examples/foo/main.tf" }}
+  ```
 
-<br clear="all">
+  ## Resources
 
-## Contributor Guide
+  {{ range .Module.Resources }}
+  - {{ .GetMode }}.{{ .Spec }} ({{ .Position.Filename }}#{{ .Position.Line }})
+  {{- end }}
+````
 
-XC3 is a community-driven project; we welcome your contribution! For code contributions, please read our [contribution guide](./CONTRIBUTING.md).
+## Build on top of terraform-docs
 
-- File a [GitHub issue](https://github.com/XgridInc/xc3/issues) to report a bug or request a feature.
-- Join our [Slack](https://join.slack.com/t/xgrid-group/shared_invite/zt-1uhzlrt6t-Dx_BqfQJKsHhSug1arbbAQ) for live conversations and quick questions.
+terraform-docs primary use-case is to be utilized as a standalone binary, but
+some parts of it is also available publicly and can be imported in your project
+as a library.
 
-<br clear="all">
+```go
+import (
+    "github.com/terraform-docs/terraform-docs/format"
+    "github.com/terraform-docs/terraform-docs/print"
+    "github.com/terraform-docs/terraform-docs/terraform"
+)
 
-## RoadMap
+// buildTerraformDocs for module root `path` and provided content `tmpl`.
+func buildTerraformDocs(path string, tmpl string) (string, error) {
+    config := print.DefaultConfig()
+    config.ModuleRoot = path // module root path (can be relative or absolute)
 
-We welcome feedback and suggestions from our community! Please feel free to create an issue or join our discussion forum to share your thoughts.
-For project updates, please read our [roadmap guide](./ROADMAP.md).
+    module, err := terraform.LoadWithOptions(config)
+    if err != nil {
+        return "", err
+    }
+
+    // Generate in Markdown Table format
+    formatter := format.NewMarkdownTable(config)
+
+    if err := formatter.Generate(module); err != nil {
+        return "", err
+    }
+
+    // // Note: if you don't intend to provide additional template for the generated
+    // // content, or the target format doesn't provide templating (e.g. json, yaml,
+    // // xml, or toml) you can use `Content()` function instead of `Render()`.
+    // // `Content()` returns all the sections combined with predefined order.
+    // return formatter.Content(), nil
+
+    return formatter.Render(tmpl)
+}
+```
+
+## Plugin
+
+Generated output can be heavily customized with [`content`], but if using that
+is not enough for your use-case, you can write your own plugin.
+
+In order to install a plugin the following steps are needed:
+
+- download the plugin and place it in `~/.tfdocs.d/plugins` (or `./.tfdocs.d/plugins`)
+- make sure the plugin file name is `tfdocs-format-<NAME>`
+- modify [`formatter`] of `.terraform-docs.yml` file to be `<NAME>`
+
+**Important notes:**
+
+- if the plugin file name is different than the example above, terraform-docs won't
+be able to to pick it up nor register it properly
+- you can only use plugin thorough `.terraform-docs.yml` file and it cannot be used
+with CLI arguments
+
+To create a new plugin create a new repository called `tfdocs-format-<NAME>` with
+following `main.go`:
+
+```go
+package main
+
+import (
+    _ "embed" //nolint
+
+    "github.com/terraform-docs/terraform-docs/plugin"
+    "github.com/terraform-docs/terraform-docs/print"
+    "github.com/terraform-docs/terraform-docs/template"
+    "github.com/terraform-docs/terraform-docs/terraform"
+)
+
+func main() {
+    plugin.Serve(&plugin.ServeOpts{
+        Name:    "<NAME>",
+        Version: "0.1.0",
+        Printer: printerFunc,
+    })
+}
+
+//go:embed sections.tmpl
+var tplCustom []byte
+
+// printerFunc the function being executed by the plugin client.
+func printerFunc(config *print.Config, module *terraform.Module) (string, error) {
+    tpl := template.New(config,
+        &template.Item{Name: "custom", Text: string(tplCustom)},
+    )
+
+    rendered, err := tpl.Render("custom", module)
+    if err != nil {
+        return "", err
+    }
+
+    return rendered, nil
+}
+```
+
+Please refer to [tfdocs-format-template] for more details. You can create a new
+repository from it by clicking on `Use this template` button.
+
+## Documentation
+
+- **Users**
+  - Read the [User Guide] to learn how to use terraform-docs
+  - Read the [Formats Guide] to learn about different output formats of terraform-docs
+  - Refer to [Config File Reference] for all the available configuration options
+- **Developers**
+  - Read [Contributing Guide] before submitting a pull request
+
+Visit [our website] for all documentation.
+
+## Community
+
+- Discuss terraform-docs on [Slack]
 
 ## License
 
-XC3 is licensed under [Apache License, Version 2.0](./LICENSE).
+MIT License - Copyright (c) 2021 The terraform-docs Authors.
+
+[Chocolatey]: https://www.chocolatey.org
+[Config File Reference]: https://terraform-docs.io/user-guide/configuration/
+[`content`]: https://terraform-docs.io/user-guide/configuration/content/
+[Contributing Guide]: CONTRIBUTING.md
+[Formats Guide]: https://terraform-docs.io/reference/terraform-docs/
+[`formatter`]: https://terraform-docs.io/user-guide/configuration/formatter/
+[here]: https://golang.org/doc/code.html#GOPATH
+[Homebrew]: https://brew.sh
+[install pre-commit]: https://pre-commit.com/#install
+[`output`]: https://terraform-docs.io/user-guide/configuration/output/
+[releases]: https://github.com/terraform-docs/terraform-docs/releases
+[Scoop]: https://scoop.sh/
+[Slack]: https://slack.terraform-docs.io/
+[terraform-docs GitHub Action]: https://github.com/terraform-docs/gh-actions
+[Terraform module]: https://pkg.go.dev/github.com/terraform-docs/terraform-docs/terraform#Module
+[tfdocs-format-template]: https://github.com/terraform-docs/tfdocs-format-template
+[our website]: https://terraform-docs.io/
+[User Guide]: https://terraform-docs.io/user-guide/introduction/

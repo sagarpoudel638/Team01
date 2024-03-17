@@ -55,7 +55,7 @@ module "xc3" {
   grafana_api_gateway = module.serverless.grafana_api_gateway
   env                 = var.env
   # removed network module dependency - fixed - in case if you face any issues regarding network timeout
-  # _ in instance level, write -> depends_on = [module.networking] 
+  # _ in instance level, write -> depends_on = [module.networking]
 }
 
 // Terraform Module for Serverless Application
@@ -83,4 +83,5 @@ module "serverless" {
   create_cloudtrail           = var.create_cloudtrail
   create_cloudtrail_s3_bucket = var.create_cloudtrail_s3_bucket
   env                         = var.env
+  iam_role_cost_lambda        = var.iam_role_cost_lambda
 }
