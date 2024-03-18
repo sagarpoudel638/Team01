@@ -67,6 +67,11 @@ variable "total_account_cost_lambda" {
   description = "The name of the lambda function that will be used to calculate cost metrics of provided AWS Account"
 }
 
+variable "iam_role_cost_function_lambda" {
+  type        = string
+  description = "The name of the lambda function that will be used to calculate cost mertics of IAM Role"
+}
+
 variable "account_id" {
   type        = string
   description = "AWS Account ID"

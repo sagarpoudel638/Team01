@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-namespace      = "xc3abhishek1999"
+namespace      = "xc3abhishek19991"
 env            = "dev"
 region         = "ap-southeast-2"
 account_id     = "211125640160"
@@ -33,12 +33,13 @@ ses_email_address           = "104057262@student.swin.edu.au"
 creator_email               = "104057262@student.swin.edu.au"
 owner_email                 = "104057262@student.swin.edu.au"
 instance_type               = "t2.micro"
+iam_role_cost_function_lambda = "iam_role_cost_function"
 total_account_cost_lambda   = "total_account_cost"
 total_account_cost_cronjob  = "cron(0 0 1,15 * ? *)"     // flexible can be set according to need
 prometheus_layer            = "lambda_layers/python.zip" // s3 key for lambda layer
 memory_size                 = 128
 timeout                     = 300
-project                     = "xc3abhishek1999"
+project                     = "xc3abhishek19991"
 create_cloudtrail_kms       = false
 create_cloudtrail           = false
 create_cloudtrail_s3_bucket = false
