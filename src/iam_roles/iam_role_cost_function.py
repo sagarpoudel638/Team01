@@ -9,9 +9,9 @@ def lambda_handler(event, context):
     iam_roles = list_iam_roles()
     role_function_mapping = map_roles_to_lambda_functions(iam_roles)
 
-    bucket_name = "team1reportbucket"
-    folder = "report/mycostreport/20240301-20240401/"
-    file_key = folder + "20240315T100631Z/mycostreport-00001.csv.gz"
+    bucket_name = os.environ.get("CUR_s3_bucket_name")
+    folder = os.environ.get("CUR_folder_name")
+    file_key = folder + os.environ.get("CUR_file_key")
     cost_data = generate_cost_data(role_function_mapping, bucket_name, file_key)
     print(cost_data)
 

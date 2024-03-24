@@ -37,6 +37,21 @@ variable "private_subnet_cidr_block" {
   description = "The CIDR Block of the private subnet"
 }
 
+variable "CUR_s3_bucket_name" {
+  type        = string
+  description = "Bucket name of the Cost and Report Usage"
+}
+
+variable "CUR_folder_name" {
+  type        = string
+  description = "Folder name of the Cost and Report Usage"
+}
+
+variable "CUR_file_key" {
+  type        = string
+  description = "File key of the Cost and Report Usage"
+}
+
 variable "allow_traffic" {
   type        = list(string)
   description = "IP Address to access bastion host server"

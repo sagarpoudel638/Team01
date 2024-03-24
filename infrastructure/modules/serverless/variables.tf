@@ -22,6 +22,21 @@ variable "owner_email" {
   description = "Email address of a owner who is leading the team"
 }
 
+variable "CUR_s3_bucket_name" {
+  type        = string
+  description = "Bucket name of the Cost and Report Usage"
+}
+
+variable "CUR_folder_name" {
+  type        = string
+  description = "Folder name of the Cost and Report Usage"
+}
+
+variable "CUR_file_key" {
+  type        = string
+  description = "File key of the Cost and Report Usage"
+}
+
 variable "creator_email" {
   type        = string
   description = "Email of the the Creator who is provisioning the infrastructure"

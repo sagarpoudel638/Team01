@@ -99,6 +99,9 @@ resource "aws_lambda_function" "iam_role_cost_function" {
       account_detail = var.namespace
       creator_email    = var.creator_email
       owner_email = var.owner_email
+      CUR_s3_bucket_name = var.CUR_s3_bucket_name
+      CUR_folder_name = var.CUR_folder_name
+      CUR_file_key = var.CUR_file_key
     }
   }
   memory_size = var.memory_size
