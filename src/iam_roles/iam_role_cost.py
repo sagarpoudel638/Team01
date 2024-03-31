@@ -17,34 +17,8 @@ def lambda_handler(event, context):
     folder = "report/mycostreport/20240301-20240401/"
     file_key = folder + "20240315T100631Z/mycostreport-00001.csv.gz"
     cost_data = generate_cost_data(role_function_mapping, bucket_name, file_key)
-    # return {
-    #     'statusCode': 200,
-    #     'body': json.dumps(cost_data)
-    # }
-    # with open('new_cost_data_lambda.json', 'w') as outfile:
-    #     json.dump(cost_data, outfile, indent=4)
+
     print(cost_data)
-    # data = cost_data
-    # # Aggregate the data by function name
-    # aggregated_data = {}
-    # for item in data:
-    #     function_name = item['FunctionName']
-    #     if function_name not in aggregated_data:
-    #         aggregated_data[function_name] = []
-
-    #     for result in item['CostData']['ResultsByTime']:
-    #         start_date = result['TimePeriod']['Start']
-    #         amount = result['Total']['UnblendedCost']['Amount']
-    #         aggregated_data[function_name].append
-    #          ({'Start': start_date, 'Amount': amount})
-
-    # # Example of the aggregated data structure
-    # for function_name, costs in aggregated_data.items():
-    #     print(f"Function Name: {function_name}")
-    #     for cost in costs:
-    #         print(f"Start Date: {cost['Start']}, Amount: {cost['Amount']}")
-    #     print("\n")
-    # #print(aggregated_data)
 
     registry = CollectorRegistry()
 
@@ -55,12 +29,6 @@ def lambda_handler(event, context):
         ["role_name", "function_name", "start_date"],
         registry=registry,
     )
-
-    # # Populate the metric with data from aggregated_data
-    # for function_name, costs in aggregated_data.items():
-    #     for cost_info in costs:
-    #         cost_gauge.labels(function_name=function_name,
-    # start_date=cost_info['Start']).set(float(cost_info['Amount']))
 
     # Iterate over the original cost_data to populate the metric
     for role_name, role_data in cost_data.items():
@@ -176,6 +144,3 @@ def download_and_decompress_csv(bucket_name, file_key):
         file_content = gz.read().decode("utf-8")
 
     return file_content
-
-
-# lambda_handler(1,2)
