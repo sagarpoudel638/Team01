@@ -3,7 +3,6 @@ import boto3
 import csv
 from io import StringIO, BytesIO
 import gzip
-import concurrent.futures
 from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 
 # Define global variables
@@ -48,7 +47,8 @@ def generate_cost_data(iam_roles, lambda_role_mapping, bucket_name, file_key):
     csv_content = download_and_decompress_csv(bucket_name, file_key)
     role_cost_data = {role["RoleName"]: 0.0 for role in iam_roles}
 
-    def process_row(row):
+    csv_reader = csv.DictReader(StringIO(csv_content))
+    for row in csv_reader:
         if row["lineItem/ProductCode"] == "AmazonCloudWatch":
             cost = float(row["lineItem/UnblendedCost"])
             resource_id = row["lineItem/ResourceId"]
@@ -57,11 +57,6 @@ def generate_cost_data(iam_roles, lambda_role_mapping, bucket_name, file_key):
                 role_name = get_role_name_from_arn(role_arn, iam_roles)
                 if role_name in role_cost_data:
                     role_cost_data[role_name] += round(cost, 8)
-
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        csv_reader = csv.DictReader(StringIO(csv_content))
-        futures = [executor.submit(process_row, row) for row in csv_reader]
-        concurrent.futures.wait(futures)
 
     return role_cost_data
 
