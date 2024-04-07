@@ -8,6 +8,8 @@ from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 import gzip
 import os
 
+# from botocore.exceptions import ClientError
+
 
 def lambda_handler(event, context):
     iam_roles = list_iam_roles()
@@ -56,7 +58,7 @@ def list_iam_roles():
     paginator = iam_client.get_paginator("list_roles")
     for page in paginator.paginate():
         for role in page["Roles"]:
-            iam_roles.append(role)
+            iam_roles.append(role["RoleName"])
     return iam_roles
 
 
