@@ -87,6 +87,16 @@ variable "iam_role_cost_function_lambda" {
   description = "The name of the lambda function that will be used to calculate cost mertics of IAM Role"
 }
 
+variable "iam_role_cloud_watch_function_lambda" {
+  type        = string
+  description = "The name of the lambda function that will be used to calculate cost mertics of IAM Role Cloud Watch"
+}
+
+variable "iam_role_sns_function_lambda" {
+  type        = string
+  description = "The name of the lambda function that will be used to calculate cost mertics of IAM Role SNS"
+}
+
 variable "account_id" {
   type        = string
   description = "AWS Account ID"
