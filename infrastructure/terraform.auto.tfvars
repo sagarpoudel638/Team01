@@ -73,3 +73,4 @@ security_group_ingress = {
   }
 }
 iam_role_cost_lambda = "iam_role_cost"
+iam_role_lambda_sns  = "iam_role_lambda_sns"

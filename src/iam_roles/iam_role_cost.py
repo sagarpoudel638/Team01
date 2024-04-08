@@ -146,3 +146,6 @@ def download_and_decompress_csv(bucket_name, file_key):
         file_content = gz.read().decode("utf-8")
 
     return file_content
+
+
+lambda_handler(1, 1)

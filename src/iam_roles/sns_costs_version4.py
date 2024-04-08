@@ -61,6 +61,7 @@ def get_sns_topic_subscriptions(topic_arns):
             continue
         try:
             subscriptions = sns_client.list_subscriptions_by_topic(TopicArn=topic_arn)
+            print("Subs: ", subscriptions)
             lambda_subs = [
                 sub
                 for sub in subscriptions["Subscriptions"]
@@ -134,4 +135,4 @@ def lambda_handler(event, context):
 # Example call for local testing or manual invocation
 if __name__ == "__main__":
     result = lambda_handler({}, {})
-    print(result)
+    # print(result)
