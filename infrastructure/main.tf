@@ -83,6 +83,6 @@ module "serverless" {
   create_cloudtrail           = var.create_cloudtrail
   create_cloudtrail_s3_bucket = var.create_cloudtrail_s3_bucket
   env                         = var.env
-  iam_role_cost_lambda        = var.iam_role_cost_lambda
-  iam_role_lambda_sns         = var.iam_role_lambda_sns
+  # iam_role_cost_lambda        = var.iam_role_cost_lambda
+  iam_role_lambda_sns = var.iam_role_lambda_sns
 }
