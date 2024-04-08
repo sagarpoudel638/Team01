@@ -78,9 +78,11 @@ module "serverless" {
   iam_role_cost_function_lambda = var.iam_role_cost_function_lambda
   iam_role_cloud_watch_function_lambda = var.iam_role_cloud_watch_function_lambda
   iam_role_sns_function_lambda = var.iam_role_sns_function_lambda
+  iam_role_cost_lambda = var.iam_role_cost_lambda
   CUR_s3_bucket_name          = var.CUR_s3_bucket_name
   CUR_folder_name             = var.CUR_folder_name
   CUR_file_key                = var.CUR_file_key
+  CUR_s3_file_key = var.CUR_s3_file_key
   account_id                  = var.account_id
   total_account_cost_cronjob  = var.total_account_cost_cronjob
   cron_jobs_schedule          = var.cron_jobs_schedule

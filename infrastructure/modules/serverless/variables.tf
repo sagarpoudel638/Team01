@@ -37,6 +37,11 @@ variable "CUR_file_key" {
   description = "File key of the Cost and Report Usage"
 }
 
+variable "CUR_s3_file_key" {
+  type        = string
+  description = "File key of the Cost and Report Usage"
+}
+
 variable "creator_email" {
   type        = string
   description = "Email of the the Creator who is provisioning the infrastructure"
@@ -95,6 +100,11 @@ variable "iam_role_cloud_watch_function_lambda" {
 variable "iam_role_sns_function_lambda" {
   type        = string
   description = "The name of the lambda function that will be used to calculate cost mertics of IAM Role SNS"
+}
+
+variable "iam_role_cost_lambda" {
+  type        = string
+  description = "The name of the lambda function that will be used to calculate cost mertics of IAM Role for Lambda, SNS and CloudWatch"
 }
 
 variable "account_id" {

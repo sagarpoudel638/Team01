@@ -1,12 +1,12 @@
-data "archive_file" "iam_role_sns_function" {
+data "archive_file" "iam_role_cost" {
   type        = "zip"
-  source_file = "../src/iam_roles/iam_role_sns_function.py"
-  output_path = "${path.module}/iam_role_sns_function.zip"
+  source_file = "../src/iam_roles/iam_role_cost.py"
+  output_path = "${path.module}/iam_role_cost.zip"
 }
 
 # Creating IAM Role for Lambda functions
-resource "aws_iam_role" "iam_role_sns_function" {
-  name = "${var.namespace}-${var.iam_role_sns_function_lambda}-role"
+resource "aws_iam_role" "iam_role_cost" {
+  name = "${var.namespace}-${var.iam_role_cost_lambda}-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -21,12 +21,12 @@ resource "aws_iam_role" "iam_role_sns_function" {
     ]
   })
   managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]
-  tags                = merge(local.tags, tomap({ "Name" = "${var.namespace}-iam_role_sns_function" }))
+  tags                = merge(local.tags, tomap({ "Name" = "${var.namespace}-iam_role_cost" }))
 }
 
-resource "aws_iam_role_policy" "iam_role_sns_function" {
-  name = "${var.namespace}-${var.iam_role_sns_function_lambda}-ce-policy"
-  role = aws_iam_role.iam_role_sns_function.id
+resource "aws_iam_role_policy" "iam_role_cost" {
+  name = "${var.namespace}-${var.iam_role_cost_lambda}-ce-policy"
+  role = aws_iam_role.iam_role_cost.id
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -71,13 +71,13 @@ resource "aws_iam_role_policy" "iam_role_sns_function" {
         "Action" : [
           "s3:GetObject"
         ],
-        "Resource" : "arn:aws:s3:::${var.CUR_s3_bucket_name}/*"
+        "Resource" : "arn:aws:s3:::${var.CUR_s3_bucket_name}/*" 
       },
         {
             "Effect": "Allow",
             "Action": [
                 "SNS:ListSubscriptionsByTopic"],
-            "Resource": "arn:aws:sns:ap-southeast-2:211125640160:*"
+            "Resource": "*"
         },
       {
         "Sid" : "ListLambdaFunctions",
@@ -91,12 +91,12 @@ resource "aws_iam_role_policy" "iam_role_sns_function" {
   })
 }
 
-resource "aws_lambda_function" "iam_role_sns_function" {
-  function_name = "${var.namespace}-${var.iam_role_sns_function_lambda}"
-  role          = aws_iam_role.iam_role_sns_function.arn
+resource "aws_lambda_function" "iam_role_cost" {
+  function_name = "${var.namespace}-${var.iam_role_cost_lambda}"
+  role          = aws_iam_role.iam_role_cost.arn
   runtime       = "python3.9"
-  handler       = "${var.iam_role_sns_function_lambda}.lambda_handler"
-  filename      = data.archive_file.iam_role_sns_function.output_path
+  handler       = "${var.iam_role_cost_lambda}.lambda_handler"
+  filename      = data.archive_file.iam_role_cost.output_path
   environment {
     variables = {
       prometheus_ip  = "${var.prometheus_ip}:9091"
@@ -104,8 +104,7 @@ resource "aws_lambda_function" "iam_role_sns_function" {
       creator_email    = var.creator_email
       owner_email = var.owner_email
       CUR_s3_bucket_name = var.CUR_s3_bucket_name
-      CUR_folder_name = var.CUR_folder_name
-      CUR_file_key = var.CUR_file_key
+      CUR_s3_file_key = var.CUR_s3_file_key
     }
   }
   memory_size = var.memory_size
@@ -115,11 +114,11 @@ resource "aws_lambda_function" "iam_role_sns_function" {
     subnet_ids         = [var.subnet_id[0]]
     security_group_ids = [var.security_group_id]
   }
-  tags = merge(local.tags, tomap({ "Name" = "${var.namespace}-iam_role_sns_function" }))
+  tags = merge(local.tags, tomap({ "Name" = "${var.namespace}-iam_role_cost" }))
 }
 
-resource "aws_iam_policy" "iam_role_sns_function" {
-  name = "${var.namespace}-iam_role_sns_function_eventbridge_policy"
+resource "aws_iam_policy" "iam_role_cost" {
+  name = "${var.namespace}-iam_role_cost_eventbridge_policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -129,13 +128,13 @@ resource "aws_iam_policy" "iam_role_sns_function" {
           "lambda:InvokeFunction"
         ]
         Effect   = "Allow"
-        Resource = aws_lambda_function.iam_role_sns_function.arn
+        Resource = aws_lambda_function.iam_role_cost.arn
       }
     ]
   })
 }
 
-resource "aws_iam_role_policy_attachment" "iam_role_sns_function" {
-  policy_arn = aws_iam_policy.iam_role_sns_function.arn
-  role       = aws_iam_role.iam_role_sns_function.name
+resource "aws_iam_role_policy_attachment" "iam_role_cost" {
+  policy_arn = aws_iam_policy.iam_role_cost.arn
+  role       = aws_iam_role.iam_role_cost.name
 }

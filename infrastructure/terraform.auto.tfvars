@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-namespace      = "xc3abhishek1999191919"
+namespace      = "xc3abhishekc"
 env            = "dev"
 region         = "ap-southeast-2"
 account_id     = "211125640160"
@@ -36,15 +36,17 @@ instance_type               = "t2.micro"
 CUR_s3_bucket_name          = "team1reportbucket"
 CUR_folder_name             = "report/mycostreport/20240301-20240401/"
 CUR_file_key                = "20240315T100631Z/modified.gz"
+CUR_s3_file_key = "report/mycostreport/20240401-20240501/20240405T101631Z/mycostreport-00002.csv"
 iam_role_cloud_watch_function_lambda = "iam_role_cloud_watch_function"
 iam_role_sns_function_lambda = "iam_role_sns_function"
 iam_role_cost_function_lambda = "iam_role_cost_function"
+iam_role_cost_lambda = "iam_role_cost"
 total_account_cost_lambda   = "total_account_cost"
 total_account_cost_cronjob  = "cron(0 0 1,15 * ? *)"     // flexible can be set according to need
 prometheus_layer            = "lambda_layers/python.zip" // s3 key for lambda layer
 memory_size                 = 128
 timeout                     = 300
-project                     = "xc3abhishek1999191919"
+project                     = "xc3abhishekc"
 create_cloudtrail_kms       = false
 create_cloudtrail           = false
 create_cloudtrail_s3_bucket = false

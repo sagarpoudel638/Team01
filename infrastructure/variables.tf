@@ -52,6 +52,11 @@ variable "CUR_file_key" {
   description = "File key of the Cost and Report Usage"
 }
 
+variable "CUR_s3_file_key" {
+  type        = string
+  description = "File key of the Cost and Report Usage"
+}
+
 variable "allow_traffic" {
   type        = list(string)
   description = "IP Address to access bastion host server"
@@ -127,6 +132,11 @@ variable "iam_role_cloud_watch_function_lambda" {
 variable "iam_role_sns_function_lambda" {
   type        = string
   description = "The name of the lambda function that will be used to calculate cost metrics of IAM Role SNS"
+}
+
+variable "iam_role_cost_lambda" {
+  type        = string
+  description = "The name of the lambda function that will be used to calculate cost metrics of IAM Role for Lambda, SNS and CloudWatch"
 }
 
 variable "account_id" {

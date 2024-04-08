@@ -71,7 +71,7 @@ resource "aws_iam_role_policy" "iam_role_cloud_watch_function" {
         "Action" : [
           "s3:GetObject"
         ],
-        "Resource" : "arn:aws:s3:::${var.CUR_s3_bucket_name}/*"  // Update this with the correct ARN for your bucket
+        "Resource" : "arn:aws:s3:::${var.CUR_s3_bucket_name}/*" 
       },
       {
         "Sid" : "ListLambdaFunctions",
